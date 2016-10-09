@@ -17,7 +17,10 @@ def build_url(lat, lng, time_stamp=None):
 def get_forecast(lat, lng):
     url = build_url(lat, lng)
     response = requests.get(url, params={'lang': settings.LANG, 'units': 'si'})
-    decoded_response = json.loads(response.content.decode('utf-8'))
+    content = response.content.decode('utf-8')
+    if response.status_code != 200:
+        print(content)
+    decoded_response = json.loads(content)
     summary_hourly = decoded_response['hourly']['summary']
     next_hour = decoded_response['hourly']['data'][1]
     next_hour_temperature = next_hour['temperature']
